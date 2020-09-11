@@ -1,0 +1,23 @@
+.top_accuse_post:before { content: "\f15c"; }
+.top_accuse_comment:before { content: "\f0ca"; }
+.top_accuse_chatRoom:before { content: "\f0e5"; }
+
+div[id^="topBarMsg_accuse_"] {
+    right: 100px;
+}
+
+.TOP-bh a[class^="top_accuse_"]:not(:empty):before {
+    color: #FFF;
+}
+
+.BA-top a[class^="top_accuse_"]:not(:empty):before {
+    color: #249db8;
+}
+
+span[class^="ani_top_accuse_"]:not(:empty) {
+    display: block;
+}
+
+span[class^="ani_top_accuse_"]:empty {
+    display: none;
+}
