@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         巴哈姆特哈拉區頂端列顯示檢舉數提醒與各板檢舉數
 // @namespace    https://home.gamer.com.tw/moontai0724
-// @version      4.0
+// @version      4.1
 // @description  於巴哈姆特哈拉區頂端列顯示檢舉數提醒與各板檢舉數
 // @author       moontai0724
 // @match        https://*.gamer.com.tw/*
@@ -54,7 +54,7 @@
         jQuery(li).insertBefore(`.member li:nth-child(${2 + i})`);
       } else {
         let topIcon = document.createElement("a");
-        topIcon.href = `javascript:TOPBAR_show('accuse_${list[i].id}', 'top_accuse_${list[i].id}')`;
+        topIcon.href = `javascript:TopBar.showMenu('accuse_${list[i].id}', 'top_accuse_${list[i].id}')`;
         topIcon.id = `topBar_accuse_${list[i].id}`;
         topIcon.setAttribute("class", `top_accuse_${list[i].id}`);
 
