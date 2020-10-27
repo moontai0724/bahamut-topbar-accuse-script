@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.0] - 2020-10-27
+### Fixed
+- 巴哈更新程式碼，導致視窗顯示後被系統清除
+
+## [4.1.0] - 2020-09-11
+### Fixed
+- 巴哈更新程式碼，造成視窗點擊後無法觸發顯示
+
 ## [4.0.0] - 2019-04-20
 ### Changed
 - 分離 CSS
