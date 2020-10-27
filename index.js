@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         巴哈姆特哈拉區頂端列顯示檢舉數提醒與各板檢舉數
 // @namespace    https://home.gamer.com.tw/moontai0724
-// @version      4.1
+// @version      4.2
 // @description  於巴哈姆特哈拉區頂端列顯示檢舉數提醒與各板檢舉數
 // @author       moontai0724
 // @match        https://*.gamer.com.tw/*
@@ -126,7 +126,7 @@
   }
 
   function setAccuseCount(id, accuseCount) {
-    jQuery(`#topBar_accuse_${id}`).html(accuseCount > 0 ? (location.host == "ani.gamer.com.tw" ? accuseCount : `<span>${accuseCount}</span>`) : "");
+    jQuery(`#topBar_accuse_${id}`).html(accuseCount > 0 ? (location.host == "ani.gamer.com.tw" ? accuseCount : `<span class>${accuseCount}</span>`) : "");
   }
 
   // 巴哈姆特 API
