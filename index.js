@@ -1,102 +1,106 @@
 // ==UserScript==
 // @name         巴哈姆特哈拉區頂端列顯示檢舉數提醒與各板檢舉數
 // @namespace    https://home.gamer.com.tw/moontai0724
-// @version      4.2
+// @version      4.3
 // @description  於巴哈姆特哈拉區頂端列顯示檢舉數提醒與各板檢舉數
 // @author       moontai0724
 // @match        https://*.gamer.com.tw/*
 // @match        http://*.gamer.com.tw/*
 // @connect      forum.gamer.com.tw
+// @require      https://code.jquery.com/jquery-3.5.1.min.js
 // @resource     topBarCss https://raw.githubusercontent.com/moontai0724/bahamut-topbar-accuse-script/master/index.css
 // @grant        GM_xmlhttpRequest
 // @grant        GM_getResourceText
 // @grant        GM_addStyle
 // ==/UserScript==
 
-(async function (jQuery) {
+(async function () {
   'use strict';
-  if (BAHAID) {
-    GM_addStyle(GM_getResourceText("topBarCss"));
+  const BAHAID = document.cookie.replaceAll("\\s", "").split(";").filter(cookie => cookie.startsWith("BAHAID"))[0];
 
-    var list = [{
-      id: 'post',
-      name: '文章',
-      href: 'https://forum.gamer.com.tw/gemadmin/accuse_B_2k14.php?t=2&s=1&n=1',
-      t: 2
-    }, {
-      id: 'comment',
-      name: '留言',
-      href: 'https://forum.gamer.com.tw/gemadmin/accuse_commend_2k14.php?t=1&s=1&n=1',
-      t: 1
-    }, {
-      id: 'chatRoom',
-      name: '聊天室',
-      href: 'https://forum.gamer.com.tw/gemadmin/accuse_im_2k14.php?t=3&s=1&n=1',
-      t: 3
-    }];
+  if (!BAHAID)
+    return;
 
-    for (let i = 0; i <= 2; i++) {
-      if (location.host == "ani.gamer.com.tw") {
-        let iconsName = ["description", "list", "chat_bubble_outline"];
-        let li = document.createElement("li");
+  GM_addStyle(GM_getResourceText("topBarCss"));
 
-        let span = document.createElement("span");
-        span.id = `topBar_accuse_${list[i].id}`;
-        span.setAttribute("class", `ani_top_accuse_${list[i].id}`);
-        li.appendChild(span);
+  var list = [{
+    id: 'post',
+    name: '文章',
+    href: 'https://forum.gamer.com.tw/gemadmin/accuse_B_2k14.php?t=2&s=1&n=1',
+    t: 2
+  }, {
+    id: 'comment',
+    name: '留言',
+    href: 'https://forum.gamer.com.tw/gemadmin/accuse_commend_2k14.php?t=1&s=1&n=1',
+    t: 1
+  }, {
+    id: 'chatRoom',
+    name: '聊天室',
+    href: 'https://forum.gamer.com.tw/gemadmin/accuse_im_2k14.php?t=3&s=1&n=1',
+    t: 3
+  }];
 
-        let topIcon = document.createElement("a");
-        topIcon.href = `javascript:TOPBAR_show('accuse_${list[i].id}')`;
-        topIcon.innerHTML = `<i class="material-icons">${iconsName[i]}</i>`
-        li.appendChild(topIcon);
+  for (let i = 0; i <= 2; i++) {
+    if (location.host == "ani.gamer.com.tw") {
+      let iconsName = ["description", "list", "chat_bubble_outline"];
+      let li = document.createElement("li");
 
-        // 新增頂端列 icon
-        jQuery(li).insertBefore(`.member li:nth-child(${2 + i})`);
-      } else {
-        let topIcon = document.createElement("a");
-        topIcon.href = `javascript:TopBar.showMenu('accuse_${list[i].id}', 'top_accuse_${list[i].id}')`;
-        topIcon.id = `topBar_accuse_${list[i].id}`;
-        topIcon.setAttribute("class", `top_accuse_${list[i].id}`);
+      let span = document.createElement("span");
+      span.id = `topBar_accuse_${list[i].id}`;
+      span.setAttribute("class", `ani_top_accuse_${list[i].id}`);
+      li.appendChild(span);
 
-        // 新增頂端列 icon
-        jQuery(topIcon).insertBefore("#topBar_light_0");
-      }
+      let topIcon = document.createElement("a");
+      topIcon.href = `javascript:TOPBAR_show('accuse_${list[i].id}')`;
+      topIcon.innerHTML = `<i class="material-icons">${iconsName[i]}</i>`
+      li.appendChild(topIcon);
 
+      // 新增頂端列 icon
+      jQuery(li).insertBefore(`.member li:nth-child(${2 + i})`);
+    } else {
+      let topIcon = document.createElement("a");
+      topIcon.href = `javascript:TopBar.showMenu('accuse_${list[i].id}', 'top_accuse_${list[i].id}')`;
+      topIcon.id = `topBar_accuse_${list[i].id}`;
+      topIcon.setAttribute("class", `top_accuse_${list[i].id}`);
 
-      // 新增列表
-      let infoWindow = document.createElement("div");
-      infoWindow.id = `topBarMsg_accuse_${list[i].id}`;
-      infoWindow.setAttribute("class", "TOP-msg");
-      infoWindow.setAttribute("style", "display: none;");
-
-      // Title
-      let title = document.createElement("span");
-      title.innerHTML = `${list[i].name}檢舉`;
-      infoWindow.appendChild(title);
-
-      // content
-      let content = document.createElement("div");
-      content.setAttribute("class", "TOP-msglist");
-      content.id = `topBarMsgList_accuse_${list[i].id}`;
-      content.innerHTML = await getAccuseList(list[i]);
-      infoWindow.appendChild(content);
-
-      // button
-      let msgBtn = document.createElement(location.host == "ani.gamer.com.tw" ? "p" : "a");
-      msgBtn.setAttribute("class", "TOP-msgbtn");
-
-      let link = document.createElement("a");
-      link.href = list[i].href;
-      link.setAttribute("target", "_blank");
-      link.setAttribute("style", "width: auto;")
-      link.innerHTML = `<i class="fa fa-bars" aria-hidden="true"></i>看所有${list[i].name}檢舉`;
-      msgBtn.appendChild(link);
-
-      infoWindow.appendChild(msgBtn);
-
-      // 新增小窗
-      jQuery(infoWindow).insertBefore("#topBarMsg_light_0");
+      // 新增頂端列 icon
+      jQuery(topIcon).insertBefore("#topBar_light_0");
     }
+
+
+    // 新增列表
+    let infoWindow = document.createElement("div");
+    infoWindow.id = `topBarMsg_accuse_${list[i].id}`;
+    infoWindow.setAttribute("class", "TOP-msg");
+    infoWindow.setAttribute("style", "display: none;");
+
+    // Title
+    let title = document.createElement("span");
+    title.innerHTML = `${list[i].name}檢舉`;
+    infoWindow.appendChild(title);
+
+    // content
+    let content = document.createElement("div");
+    content.setAttribute("class", "TOP-msglist");
+    content.id = `topBarMsgList_accuse_${list[i].id}`;
+    content.innerHTML = await getAccuseList(list[i]);
+    infoWindow.appendChild(content);
+
+    // button
+    let msgBtn = document.createElement(location.host == "ani.gamer.com.tw" ? "p" : "a");
+    msgBtn.setAttribute("class", "TOP-msgbtn");
+
+    let link = document.createElement("a");
+    link.href = list[i].href;
+    link.setAttribute("target", "_blank");
+    link.setAttribute("style", "width: auto;")
+    link.innerHTML = `<i class="fa fa-bars" aria-hidden="true"></i>看所有${list[i].name}檢舉`;
+    msgBtn.appendChild(link);
+
+    infoWindow.appendChild(msgBtn);
+
+    // 新增小窗
+    jQuery(infoWindow).insertBefore("#topBarMsg_light_0");
   }
 
   // 獲取檢舉數
@@ -167,4 +171,4 @@
       });
     });
   }
-})(jQuery);
+})();
