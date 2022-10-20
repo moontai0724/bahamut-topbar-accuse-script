@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         巴哈姆特哈拉區頂端列顯示檢舉數提醒與各板檢舉數
 // @namespace    https://home.gamer.com.tw/moontai0724
-// @version      4.3
+// @version      4.4
 // @description  於巴哈姆特哈拉區頂端列顯示檢舉數提醒與各板檢舉數
 // @author       moontai0724
 // @match        https://*.gamer.com.tw/*
@@ -26,17 +26,17 @@
   var list = [{
     id: 'post',
     name: '文章',
-    href: 'https://forum.gamer.com.tw/gemadmin/accuse_B_2k14.php?t=2&s=1&n=1',
+    href: 'https://forum.gamer.com.tw/gemadmin/accuse.php?type=1&state=1&page=1',
     t: 2
   }, {
     id: 'comment',
     name: '留言',
-    href: 'https://forum.gamer.com.tw/gemadmin/accuse_commend_2k14.php?t=1&s=1&n=1',
+    href: 'https://forum.gamer.com.tw/gemadmin/accuse.php?type=2&state=1&page=1',
     t: 1
   }, {
     id: 'chatRoom',
     name: '聊天室',
-    href: 'https://forum.gamer.com.tw/gemadmin/accuse_im_2k14.php?t=3&s=1&n=1',
+    href: 'https://forum.gamer.com.tw/gemadmin/accuse.php?type=3&state=1&page=1',
     t: 3
   }];
 
@@ -124,7 +124,7 @@
           accuseList.push(list.outerHTML);
         }
 
-        resolve(accuseList.length > 0 ? accuseList.join() : "<div>太棒了！這裡沒有任何檢舉案。</div>");
+        resolve(accuseList.length > 0 ? accuseList.join() : "<div><a>太棒了！這裡沒有任何檢舉案。</a></div>");
       });
     });
   }
